@@ -18,7 +18,7 @@
     display: flex;
     position: absolute;
     left: 400px;
-    top: 510px;
+    top: 530px;
     width: 30px;
     }
 
@@ -33,7 +33,7 @@
       background-color: #f1f1f1;
       padding: 20px;
       margin-top: 1px;
-      height: 350px;
+      height: 370px;
 
     }
 
@@ -203,11 +203,11 @@
     </div>
     <div class="table-responsive">
     <table class="table-container display table" id="myTable" style="height:300px;display: block;overflow-y: scroll">
-      <thead style="position: fixed;z-index:1;background-color: aqua;width:1205px;height:30px;margin-bottom:5px">
+      <thead style="position: fixed;z-index:1;background-color: aqua;width:1190px;height:30px;margin-bottom:5px">
         <tr height="30px">
           <th width="450px">Name</th>
           <th width="60px">Favorite</th>
-          <th width="200px">Country</th>
+          <th width="180px">Country</th>
           <th width="130px">Country Code</th>
           <th width="350px">Website</th>
         </tr>
@@ -218,10 +218,11 @@
           <tr *ngFor="let item of (result|async) |filter:searchTextCountry| filter:searchText |pagination:[currentPage,rowCount]; let i=index ;" >
           <div *ngIf="i<rowCount" >
             <td width="450px">{{item.name}}</td>
-            <td width="60px"> <input type="checkbox"   value={{item.favorite}} (change)="onSelect(item,$event)"></td>
-            <td width="200px">{{item.country}}</td>
+            <td width="60px"> <input type="checkbox"   [checked]="favUniversityName.includes(item.name)"
+               (change)="onSelect(item,$event)"></td>
+            <td width="180px">{{item.country}}</td>
             <td width="130px">{{item.alpha_two_code}}</td>
-            <td width="350px">{{item.domains[0]}}</td>
+            <td width="350px">{{item.web_pages[0]}}</td>
           </div>
         </tr>
         </div>
@@ -230,13 +231,13 @@
       
 
         <div *ngIf="flag==1">
-          <tr *ngFor="let item of add$|async|filter: 'true'; let i=index ;" >
+          <tr *ngFor="let item of favData; let i=index ;" >
           <div *ngIf="i<rowCount" >
             <td width="450px">{{item.name}}</td>
             <td width="60px"> <input type="checkbox" disabled  checked></td>
-            <td width="200px">{{item.country}}</td>
-            <td width="130px">{{item.countryCode}}</td>
-            <td width="350px">{{item.website}}</td>
+            <td width="180px">{{item.country}}</td>
+            <td width="130px">{{item.alpha_two_code}}</td>
+            <td width="350px">{{item.web_pages}}</td>
           </div>
           </tr>
         </div>

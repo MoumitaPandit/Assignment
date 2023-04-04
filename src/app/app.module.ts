@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginationPipe } from './pipe/pagination.pipe';
 import { RoundUpPipe } from './pipe/round-up.pipe';
 import { StoreModule } from '@ngrx/store';
-import {counterReducer} from './StateManage/addFav.reducer';
+import {reducer} from './StateManage/addFav.reducer';
 import { UniqueValuePipe } from './pipe/unique-value.pipe';
 
 @NgModule({
@@ -23,7 +23,7 @@ import { UniqueValuePipe } from './pipe/unique-value.pipe';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-     StoreModule.forRoot({add:counterReducer})
+     StoreModule.forRoot({add:reducer})
     
 
   ],
