@@ -55,26 +55,20 @@ export class AppComponent {
   ) {
 
     //api call
-    // this.result = this.http.get<any>("http://universities.hipolabs.com/search",{
+     this.result = this.http.get<any>("https://moumitapandit.github.io/Assignment/Data/search");
 
+
+    // this.result=from(fetch("http://universities.hipolabs.com/search",
+    // {
     //   headers: {
     //     'Content-Type': 'application/json',
+    //     'Permissions-Policy': 'interest-cohort=()'
     //   },
-    //   method: 'get',
-    //   mode: 'no-cors'
-    // })
-
-    this.result=from(fetch("http://universities.hipolabs.com/search",
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Permissions-Policy': 'interest-cohort=()'
-      },
      
-      method: 'GET',
-      mode: 'no-cors'
-    }
-    ))
+    //   method: 'GET',
+    //   mode: 'no-cors'
+    // }
+    // ))
 
     //caching api call to localstorage
     this.result.subscribe((next: any) => {
