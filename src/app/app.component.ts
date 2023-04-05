@@ -55,7 +55,7 @@ export class AppComponent {
   ) {
 
     //api call
-     this.result = this.http.get<any>("https://moumitapandit.github.io/Assignment/Data/search");
+     this.result = this.http.get<any>("../../Data/search");
 
 
     // this.result=from(fetch("http://universities.hipolabs.com/search",
