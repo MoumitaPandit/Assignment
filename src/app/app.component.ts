@@ -68,7 +68,9 @@ export class AppComponent {
     {
       headers: {
         'Content-Type': 'application/json',
+        'Permissions-Policy': 'interest-cohort=()'
       },
+     
       method: 'GET',
       mode: 'no-cors'
     }
