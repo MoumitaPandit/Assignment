@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'
+import { Observable, from } from 'rxjs'
 import { map, startWith } from 'rxjs/operators';
 import * as _ from 'underscore';
 import { Store } from '@ngrx/store';
@@ -55,7 +55,24 @@ export class AppComponent {
   ) {
 
     //api call
-    this.result = this.http.get<any>("http://universities.hipolabs.com/search")
+    // this.result = this.http.get<any>("http://universities.hipolabs.com/search",{
+
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   method: 'get',
+    //   mode: 'no-cors'
+    // })
+
+    this.result=from(fetch("http://universities.hipolabs.com/search",
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+      mode: 'no-cors'
+    }
+    ))
 
     //caching api call to localstorage
     this.result.subscribe((next: any) => {
