@@ -12,5 +12,8 @@ createAction('[Add Item] Add fav to list',
 );
 
 export const removeItem=
-createAction('Remove Item');
+createAction('[Remove Item] Remove from list',
+props<{
+    index:any
+}>());
 

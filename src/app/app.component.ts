@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component ,ViewChild, ElementRef} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs'
 import { map, startWith } from 'rxjs/operators';
 import * as _ from 'underscore';
 import { Store } from '@ngrx/store';
-import { addItem } from './StateManage/addFav.action';
+import { addItem ,removeItem} from './StateManage/addFav.action';
 import { State } from './StateManage/addFav.reducer'
+
 
 const CACHE_API_CALL = "httpCallCache"
 
@@ -26,7 +27,10 @@ export interface universityDetails {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit{
+  @ViewChild("maxPage", { read: ElementRef }) maxPage: ElementRef | undefined;
+  @ViewChild("fabMaxPage", { read: ElementRef }) fabMaxPage: ElementRef | undefined;
+  
   title = 'UniversityApp';
   length: number = 40;
   searchText = "";
@@ -38,7 +42,9 @@ export class AppComponent {
   tableData: any = [];
   rowCount = 10;
   currentPage = 1;
+  favCurrentPage=1;
   totalPages = 1;
+  fabTotalPages=1;
   actualData: any = [];
   flag = 0;
   existInFav: boolean = true;
@@ -57,18 +63,8 @@ export class AppComponent {
     //api call
      this.result = this.http.get<any>("https://raw.githubusercontent.com/MoumitaPandit/Assignment/main/src/app/Data/search.json");
 
-
-    // this.result=from(fetch("http://universities.hipolabs.com/search",
-    // {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Permissions-Policy': 'interest-cohort=()'
-    //   },
-     
-    //   method: 'GET',
-    //   mode: 'no-cors'
-    // }
-    // ))
+    // this.result = this.http.get<any>("http://universities.hipolabs.com/search");
+   
 
     //caching api call to localstorage
     this.result.subscribe((next: any) => {
@@ -79,6 +75,10 @@ export class AppComponent {
     this.result = this.result.pipe(
       startWith(JSON.parse(localStorage[CACHE_API_CALL] || '[]'))
     )
+  }
+  ngAfterViewInit(): void {
+    this.totalPages= parseInt(this.maxPage?.nativeElement.innerHTML.split('of')[1]);
+    this.fabTotalPages=parseInt(this.fabMaxPage?.nativeElement.innerHTML.split('of')[1]);
   }
 
   ngOnInit(): void {
@@ -91,6 +91,7 @@ export class AppComponent {
     console.log(this.favUniversityName);
   }
 
+  
   //marking favorite
   onSelect(item: any, event: any) {
  
@@ -110,17 +111,22 @@ export class AppComponent {
 
     }
     else {
-      //  this.result[index].favorite = false;
+      let x = this.favData.map((object: { name: any; }) => object.name).indexOf(item.name);
+      this.store.dispatch(removeItem({
+        //  index:x
+        index:item.name
+      }));
+      this.fetchDataFromStore();
     }
     
   }
 
-  fetchDataFromStore() {
-    this.store.select('add').subscribe(
+    fetchDataFromStore() {
+     this.store.select('add').subscribe(
       x => {
         console.log(x);
-        this.favData = x.favStatus.favUniversityList;
-
+         this.favData = x.favStatus.favUniversityList;
+       
       }
     )
     return this.favData;
@@ -148,11 +154,32 @@ export class AppComponent {
 
   //pagination
   left() {
-    if (this.currentPage > 1)
+    if(this.flag==0)
+    {
+      if (this.currentPage > 1)
       this.currentPage -= 1;
+    }
+    else if(this.flag==1)
+    {
+      if (this.favCurrentPage > 1)
+      this.favCurrentPage -= 1;
+    }
+   
   }
   right() {
-    this.currentPage += 1;
+    if(this.flag==0)
+    {
+      if(this.currentPage < this.totalPages){
+        this.currentPage += 1;
+      }
+    }
+    else if(this.flag==1)
+    {
+      if (this.favCurrentPage < this.fabTotalPages)
+      this.favCurrentPage += 1;
+    }
+   
+    
   }
 
 
@@ -162,7 +189,7 @@ export class AppComponent {
     if (flag == 0) {
       this.flag = 1;
       this.label = "Go Back";
-      this.fetchDataFromStore();
+      // this.fetchDataFromStore();
     }
     else if (flag == 1) {
       this.flag = 0;

@@ -31,8 +31,22 @@ const favStatusre = createReducer(
             ]
         }
     })
-    )
+    ),
+
+    on(removeItem,(state,action)=>({
+        ...state,
+        favStatus: {
+            ...state.favStatus,
+            favUniversityList: state.favStatus.favUniversityList.filter(item => action.index !== item.name)
+        }
+//    items: 
+//    state.favStatus.favUniversityList.slice(0,action.index)
+   
+//    items:state.favStatus.favUniversityList.filter(item => action.index !== item.name)
+
+    }))
 );
+
 
 export function reducer(state:State|undefined, action:Action){
     return favStatusre(state,action);
